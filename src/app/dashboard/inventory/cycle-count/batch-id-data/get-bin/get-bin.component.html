@@ -1,0 +1,12 @@
+
+
+  <h1 mat-dialog-title>Bin Locations for Cycle Count</h1>
+<div mat-dialog-content>
+    <mat-list  *ngFor="let location of RackLocation">
+        <mat-list-item>{{location.RackLocation}}</mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</div>

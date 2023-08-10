@@ -1,0 +1,29 @@
+<div class="login-page">
+<form (ngSubmit)="login(f)" #f="ngForm" class="loginform">
+    <h1>SWIM</h1>
+    <p>Login to manage</p>
+    <p>
+        <mat-form-field appearance="standard">
+            <mat-label>User ID</mat-label>
+            <input matInput name="userId" ngModel required autocomplete="on"/>
+            <mat-icon matSuffix>alternate_email</mat-icon>
+            <mat-hint>Use your user ID to login</mat-hint>
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field appearance="standard">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="_pw" name="password" ngModel required autocomplete="on"/>
+            <mat-icon matSuffix (click)="togglePWVisiblity()" *ngIf="!passwordVisible;else pwVisible">visibility
+            </mat-icon>
+            <ng-template #pwVisible>
+                <mat-icon matSuffix (click)="togglePWVisiblity()">visibility_off</mat-icon>
+            </ng-template>
+
+            <mat-hint>Type your password</mat-hint>
+        </mat-form-field>
+    </p>
+    <label *ngIf="loginError" class="error"><mat-icon>error_outline</mat-icon> {{loginError}}</label>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!f.valid">Login</button>
+</form>
+</div>

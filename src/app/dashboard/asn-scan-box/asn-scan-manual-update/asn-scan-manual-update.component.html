@@ -1,0 +1,27 @@
+
+<h2 mat-dialog-title>Manually update qty for SKU {{data.sku}} </h2>
+<!-- {{data.sku}} -->
+<h3>Bulk update</h3>
+<h4>Current Qty {{ data.qty }}</h4>
+<form class="example-form" (ngSubmit)="updateSku(f)" #f="ngForm">
+
+
+  <table style="width: 100%;">
+      <tr>
+          <td>
+              <mat-form-field class="example-full-width">
+                  <mat-label>Update Quantity</mat-label>
+                  <input type="number" matInput ngModel name="qty" min="0" max="{{data.TotalBoxQty}}" required autocomplete="off"/>
+              </mat-form-field>
+          </td>
+      </tr>
+      <tr>
+          <td>
+              <button mat-flat-button color="accent" [disabled]="!f.valid">
+                 Update
+              </button>
+          </td>
+      </tr>
+  </table>
+</form>
+

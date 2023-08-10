@@ -1,0 +1,96 @@
+<div class="page-wrap">
+    <div class="heading result">
+      <div class="head">
+        <h1>BIN WISE INVENTORY</h1>
+        <mat-slide-toggle
+          color="primary"
+          [(ngModel)]="hhtScanEnabled"
+          (change)="hhtScanToggle($event)"
+          >USE HHT Device</mat-slide-toggle
+        >
+      </div>
+    </div>
+    <div class="find-picklist">
+      <form class="example-form" (ngSubmit)="search(f)" #f="ngForm">
+        <div class="radio">
+          <mat-form-field appearance="fill" style="width: 100%">
+            <mat-label>Select Client</mat-label>
+            <mat-select ngModel name="clientId">
+              <mat-option>None</mat-option>
+              <mat-option
+                *ngFor="let client of clientData"
+                [value]="client.CLIENTID"
+                >{{ client.CLIENT }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="radio">
+          <mat-radio-group
+            #searchBy
+            aria-label="Select an option"
+            ngModel
+            name="searchBy"
+            required
+            
+          >
+            <mat-radio-button (change)="resetField()"  value="sku" style="width: 30%"
+              >BY SKU</mat-radio-button
+            >
+            <mat-radio-button (change)="resetField()"  value="location">BY LOCATION</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <table style="width: 100%">
+          <tr>
+            <td>
+              <mat-form-field class="example-full-width">
+                <mat-label>Scan</mat-label>
+                <input matInput ngModel name="scan" #scanInput required (keyup)="scan($event)" autocomplete="off" autofocus />
+              </mat-form-field>
+            </td>
+            <td width="113">
+              <button mat-flat-button color="accent" [disabled]="!f.valid || hhtScanEnabled">
+                <mat-icon>search</mat-icon> SEARCH
+              </button>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+    
+    <div class="table-data" *ngIf="records">
+      <div class="mat-elevation-z8">
+      <table class="example-table mat-elevation-z8" style="width: 100%;" mat-table recycleRows [dataSource]="dataSource">
+       
+        <ng-container matColumnDef="WHLOCATION">
+          <th mat-header-cell *matHeaderCellDef>LOCATION </th>
+          <td mat-cell *matCellDef="let element">{{element.WHLOCATION}}</td>
+        </ng-container>
+        <ng-container matColumnDef="sku">
+          <th mat-header-cell *matHeaderCellDef>SKU</th>
+          <td mat-cell *matCellDef="let element">{{element.sku}}</td>
+        </ng-container>
+        <ng-container matColumnDef="AvailForAllocation">
+          <th mat-header-cell *matHeaderCellDef>BAL</th>
+          <td mat-cell *matCellDef="let element">{{element.AvailForAllocation}} </td>
+        </ng-container>
+        <ng-container matColumnDef="PendingForPick">
+          <th mat-header-cell *matHeaderCellDef>Pending</th>
+          <td mat-cell *matCellDef="let element"> {{element.PendingForPick}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    
+      <mat-paginator [length]="10"
+      [pageSize]="10"
+      [pageSizeOptions]="[10]"
+      aria-label="Select page">
+  </mat-paginator>
+  </div>
+    </div>
+   
+  </div>
+  
+  

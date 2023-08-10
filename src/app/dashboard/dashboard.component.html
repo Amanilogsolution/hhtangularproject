@@ -1,0 +1,87 @@
+<mat-sidenav-container class="example-container">
+    <mat-sidenav [(opened)]="navOpen" class="sidenav">
+        <div class="pan-header">
+            <div>
+                <img src="../../assets/icons/icon-72x72.png" class="logo" />
+            </div>
+            <div class="pan-header-content">
+                <p>Hello,<br>
+                    {{user.userName | titlecase}}</p>
+                <p>
+                    You are at <span>{{wareHouse.WHNAME}}</span> location <br>
+
+                </p>
+                <button mat-raised-button color="primary" (click)="changeLocatoin()"
+                    *ngIf="user.warehouseLocation.length > 1">Change Location</button>
+
+            </div>
+        </div>
+        <div class="content">
+
+            <mat-divider></mat-divider>
+            <mat-list role="list">
+                <mat-list-item role="listitem">
+                    <a routerLink="/dashboard/receiving/open-asn" mat-button>
+                        Open ASN
+                    </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">
+                    <a routerLink="/dashboard/asn" mat-button>
+                        ASN Scan
+                    </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">
+                    <a routerLink="/dashboard/put-away" mat-button>PUT AWAY </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+
+                <mat-list-item role="listitem">
+                    <a routerLink="/dashboard/receiving" mat-button>
+                        FIND ASN
+                    </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">
+                    <a routerLink="/dashboard/pick-list/pending" mat-button>
+                        Pending Picklist
+                    </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">
+                    <a routerLink="/dashboard/pick-list/pending" mat-button>
+                        Pending Picklist
+                    </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">
+                    <a routerLink="/dashboard/pick-list/scan" mat-button>
+                        Scan Picklist
+                    </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+
+
+                <mat-list-item role="listitem">
+                    <a routerLink="/dashboard/scan-test" mat-button>
+                        Scan Test
+                    </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+
+            </mat-list>
+
+        </div>
+        <app-footer></app-footer>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="dashboard">
+            <app-header></app-header>
+            <div class="page-wrapper">
+                <router-outlet></router-outlet>
+            </div>
+
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

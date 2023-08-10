@@ -1,0 +1,14 @@
+<p mat-title>Select a Client</p>
+<mat-form-field appearance="fill">
+    <mat-label>Select Client</mat-label>
+    <mat-select ngModel name="clientId" (valueChange)='getBatchId($event)'>
+      <mat-option>None</mat-option>
+      <mat-option
+        *ngFor="let client of clientData"
+        [value]="client.CLIENTID"
+        >{{ client.CLIENT }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+
+  

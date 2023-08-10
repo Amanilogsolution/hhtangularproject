@@ -1,0 +1,59 @@
+.btn{
+    display: block;
+    width: 100%;
+    margin: 20px 0;
+}
+.mat-form-field {
+    width: 100%;
+}
+.find-picklist{
+    padding: 15px;
+    background-color: #f1f1f1;
+    p{
+        text-align: center;
+    }
+}
+.head{
+    display: flex;
+    justify-content: space-between;
+}
+.heading {
+     margin: 0px 0px 0; 
+     margin-top: 2%;
+     margin-bottom: 2%;
+}
+
+.heading .item{
+    display: grid;
+    grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+    width: 100%;
+    text-decoration: none;
+    margin-bottom: 15px;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    padding-top: 10px;
+    span{
+        color: #000;
+    }
+}
+.form-inline{
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 10px;
+    >div{
+        padding: 10px;
+        border: 1px solid #eee;
+    }
+
+}
+  .tbl-class{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    border: 1px solid black;
+  }
+
+  .tbl-class td, th {
+    border: 1px solid black;
+  }

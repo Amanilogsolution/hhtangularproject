@@ -1,0 +1,80 @@
+<div class="heading">
+    <div>
+        <p>Pick List</p>
+        <h1>{{pickList}} </h1>
+    </div>
+    <div
+    [ngClass]="{'result': scanned}">
+        <p>Rack Location</p>
+        <h1>{{rackLocation}}</h1>
+    </div>
+</div>
+<div *ngIf="isLocationScan" class="scanner">
+    <h2>Scan Rack Location</h2>
+    <app-scaner (newResult)="scanLocation($event)"></app-scaner>
+    <form class="example-form" (ngSubmit)="searchLocation(f)" #f="ngForm">
+
+
+        <table style="width: 100%;">
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Search Rack Location</mat-label>
+                        <input matInput ngModel name="rackLocation" required/>
+                    </mat-form-field>
+                </td>
+                <td width="113">
+                    <button mat-flat-button color="accent" [disabled]="!f.valid">
+                        <mat-icon>search</mat-icon> Show Results
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+
+    </form>
+
+</div>
+<div *ngIf="!isLocationScan" class="scanner">
+    <h2>Scan SKU</h2>
+    <app-scaner (newResult)="scanSKU($event)"></app-scaner>
+    <form class="example-form" (ngSubmit)="searchSku(f)" #f="ngForm">
+
+
+        <table style="width: 100%;">
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Search for SKU</mat-label>
+                        <input matInput ngModel name="skuCode" required/>
+                    </mat-form-field>
+                </td>
+                <td width="113">
+                    <button mat-flat-button color="accent" [disabled]="!f.valid">
+                        <mat-icon>search</mat-icon> Show Data
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+
+    </form>
+
+    <button (click)="scanOtherLocation()" color="primary" mat-flat-button>Scan An Other Location</button>
+</div>
+
+<mat-card *ngFor="let item of rackData" (click)="manualUpdate(item.skuCode, item.batchno)">
+    <p><span>SKU: </span>{{item.skuCode}}</p>
+    <p><span>Description: </span>{{item.skudesc}}</p>
+    <p><span>Batch: </span>{{item.batchno}}</p>
+    <mat-divider></mat-divider>
+    <div class="item">
+        <p><span>INV </span>{{item.inv||0}}</p>
+        <p><span>PCK </span>{{item.pck||0}}</p>
+    </div>
+</mat-card>
+
+<mat-paginator [length]='numberOfRecords'
+              [pageSize]="10"
+              (page)="onPaginateChange($event)">
+        </mat-paginator>

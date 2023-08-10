@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div class="page-wrap">
+    <h1>Scan ASN</h1>
+    <app-scaner (newResult)="newResult($event)"></app-scaner>
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-button mat-dialog-close>Cancel</button>
+</div>

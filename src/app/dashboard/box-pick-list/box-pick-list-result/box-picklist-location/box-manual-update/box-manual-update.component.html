@@ -1,0 +1,47 @@
+
+<h2 mat-dialog-title>Manully update qty</h2>
+
+<label class="label">Box Number: {{data.boxno}}</label>
+<label class="label">Rack Location: {{data.location}}</label>
+<label class="label">Invoice Number: {{data.custinvno}}</label>
+
+<form class="example-form" (ngSubmit)="updateSku(f)" #f="ngForm">
+
+
+  <table style="width: 100%;">
+    <tr>
+        <td>
+            <mat-form-field class="example-full-width">
+                <mat-label>SKU Code</mat-label>
+                <input type="text" [readonly]="true" matInput ngModel="{{data.skuCode}}" name="skuCode" required/>
+            </mat-form-field>
+        </td>
+    </tr>
+      <tr>
+          <td>
+              <mat-form-field class="example-full-width">
+                  <mat-label>Update Quantity</mat-label>
+                  <input type="text" matInput ngModel name="qty" placeholder="ex: +1" required autocomplete="off"/>
+              </mat-form-field>
+          </td>
+      </tr>
+      <tr>
+          <td>
+              <button mat-flat-button color="accent" [disabled]="!f.valid">
+                 Update
+              </button>
+          </td>
+      </tr>
+  </table>
+
+
+</form>
+<!-- <br/>
+<br/>
+
+<h3>Quick Update</h3> -->
+
+<!-- <mat-dialog-actions align="center">
+  <button mat-flat-button (click)="decrementByOne()" color="accent">-</button>
+  <button mat-flat-button (click)="incrementByOne()" color="primary">+</button>
+</mat-dialog-actions> -->

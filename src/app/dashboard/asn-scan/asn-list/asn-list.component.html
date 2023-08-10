@@ -1,0 +1,32 @@
+<div class="page-wrap">
+    <div class="heading result">
+        <div>
+            <p>ASN List</p>
+        </div>
+    </div>
+    <div *ngIf="error">{{errorMsg}}</div>
+    <div *ngIf="list.length && !error">
+        <a (click)="goToItem(item)" *ngFor="let item of list">
+            <mat-card>
+                <h2>{{item.asnNo}}</h2>
+                <p><span>custId: </span>{{item.custId}}</p>
+                <mat-divider></mat-divider>
+                <div class="item">
+                <p><span>asnQty: </span>{{item.asnQty}}</p>
+                <p><span>scanQty: </span>{{item.scanQty}}</p>
+                </div>
+                <mat-divider></mat-divider>
+                <div class="item">
+                <p><span>invoiceNo: </span>{{item.invoiceNo}}</p>
+                <p><span>poNo: </span>{{item.poNo}}</p>
+                </div>
+            </mat-card>
+        </a>
+    </div>
+    <mat-paginator [length]='numberOfRecords'
+    [pageSize]="5"
+    (page)="onPaginateChange($event)">
+    </mat-paginator>
+
+
+</div>

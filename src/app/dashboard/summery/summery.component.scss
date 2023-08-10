@@ -1,0 +1,17 @@
+.btn{
+    display: block;
+    width: 100%;
+    margin: 0;
+}
+.wrap{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 10px;
+    .mat-icon{
+        display: block;
+        width: auto;
+        height: auto;
+        margin: 20px auto 10px;
+        font-size: 2rem;
+    }
+}

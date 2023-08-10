@@ -1,0 +1,51 @@
+<div class="page-wrap">
+    <div class="heading result">
+        <div class="head">
+            <h1>CYCLE COUNT INVENTORY</h1>
+            <mat-slide-toggle
+            color="primary"
+            [(ngModel)]="hhtScanEnabled"
+            (change)="hhtScanToggle($event)"
+            >USE HHT Device</mat-slide-toggle
+          >
+          </div>
+        <div>
+            <div class="item">
+                <p> Cycle Count Id: <span>{{batchId}} </span></p>
+                <p>TotalAllotBIN: <span>{{data?.TotalAllotBIN }} </span></p>
+                <p>OpenForCount: <span>{{data?.OpenForCount }} </span></p>
+            </div>
+        </div>
+    </div>
+    <div class="find-picklist">
+        <form class="example-form" (ngSubmit)="search(f)" #f="ngForm">
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Scan Aisles</mat-label>
+                            <input matInput autofocus ngModel name="scanAisles" required (keyup)="changeLPN($event)"
+                            autocomplete="off"  />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f.valid || hhtScanEnabled">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div *ngIf="error; else list;"></div>
+    <ng-template #list>
+        <a *ngFor="let items of getAislesData; let i = index">
+            <mat-card>
+                <p><span>Aisles: </span>{{ items.Aisles }}</p>
+                <p><span>Total Bin: </span>{{items.Total_Bin}}</p>
+            </mat-card>
+        </a>
+    </ng-template>
+    <mat-paginator *ngIf="numberOfRecords" [length]='numberOfRecords' [pageSize]="10" (page)="onPaginateChange($event)">
+    </mat-paginator>
+</div>

@@ -1,0 +1,23 @@
+<div class="page-wrap">
+    <div class="heading result">
+        <div>
+            <p>Pick List</p>
+            <h1>{{picklist}} </h1>
+        </div>
+    </div>
+    <div *ngIf="error; else list;">{{errorMsg}}</div>
+    <ng-template #list>
+        <a routerLink="{{item.location}}" *ngFor="let item of pickListDetails">
+            <mat-card>
+                <h2>{{item.location}}</h2>
+                <p><span>SKU: </span>{{item.skuCode}}</p>
+                <p><span>Description: </span>{{item.description}}</p>
+                <mat-divider></mat-divider>
+                <div class="item">
+                    <p><span>INV </span>{{item.inv||0}}</p>
+                    <p><span>PCK </span>{{item.pck||0}}</p>
+                </div>
+            </mat-card>
+        </a>
+    </ng-template>
+</div>

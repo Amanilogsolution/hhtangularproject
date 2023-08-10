@@ -1,0 +1,12 @@
+
+    <video id="video" class="videoScan"></video>
+    <div class="scanerbtn">
+    <button mat-flat-button color="accent" (click)="reset()">Stop</button>
+  <button mat-flat-button color="primary" (click)="start()">Scan</button>
+</div>
+
+    <mat-form-field appearance="standard">
+      <mat-label>Change video source:</mat-label>
+
+      <select  #SourceSelect matNativeControl required (change)="SourceChange($event)"></select>
+    </mat-form-field>

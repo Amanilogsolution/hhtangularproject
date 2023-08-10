@@ -1,0 +1,117 @@
+<div class="page-wrap">
+    <div class="heading result">
+        <div>
+            <h1>Upload MDN Info {{mdn}}</h1>
+        </div>
+    </div>
+    <div *ngIf="noMDN">
+        Invalid MDN, GO back to search again or find from MDN list
+    </div>
+    <form (ngSubmit)="updateData(f)" #f="ngForm" *ngIf="!noMDN">
+        <table>
+            <tr>
+
+                <td>
+                    <label for="vehicleImage">Vehicle Image</label>
+                    <div class="upload-section">
+                        <img [src]="sanitizeImageUrl(files[0].imgFakepath)" *ngIf="files[0]?.imgFakepath"
+                            class="upimg" />
+
+                        <mat-icon *ngIf="files[0]?.imgFakepath">sync_alt</mat-icon>
+                        <div>
+                            <input class="inputfile"  type="file" id="vehicleImage" ngModel name="vehicleImage"
+                                (change)="selectFile($event,0)" accept="image/png, image/jpeg, image/jpg" required />
+                            <label for="vehicleImage">Choose a file</label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="vehicleSealImage">Vehicle Seal Image</label>
+                    <div class="upload-section">
+                        <img [src]="sanitizeImageUrl(files[1].imgFakepath)" *ngIf="files[1]?.imgFakepath"
+                            class="upimg" />
+
+                        <mat-icon *ngIf="files[1]?.imgFakepath">sync_alt</mat-icon>
+                        <div>
+                            <input class="inputfile" type="file" id="vehicleSealImage" ngModel name="vehicleSealImage"
+                                (change)="selectFile($event,1)" accept="image/png, image/jpeg, image/jpg" required />
+                            <label for="vehicleSealImage">Choose a file</label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+
+                <td>
+                    <label for="vehicleNumberImage">Vehicle Number Plate Image</label>
+                    <div class="upload-section">
+                        <img [src]="sanitizeImageUrl(files[2].imgFakepath)" *ngIf="files[2]?.imgFakepath"
+                            class="upimg" />
+
+                        <mat-icon *ngIf="files[2]?.imgFakepath">sync_alt</mat-icon>
+                        <div>
+                            <input class="inputfile" type="file" id="vehicleNumberImage" ngModel
+                                name="vehicleNumberImage" (change)="selectFile($event,2)"
+                                accept="image/png, image/jpeg, image/jpg" required />
+                            <label for="vehicleNumberImage">Choose a file</label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="MaterialLoadedImage1">Material Loaded – Image 1</label>
+                    <div class="upload-section">
+                        <img [src]="sanitizeImageUrl(files[3].imgFakepath)" *ngIf="files[3]?.imgFakepath"
+                            class="upimg" />
+
+                        <mat-icon *ngIf="files[3]?.imgFakepath">sync_alt</mat-icon>
+                        <div>
+                            <input class="inputfile" type="file" id="MaterialLoadedImage1" ngModel
+                                name="MaterialLoadedImage1" (change)="selectFile($event,3)"
+                                accept="image/png, image/jpeg, image/jpg" required />
+                            <label for="MaterialLoadedImage1">Choose a file</label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="MaterialLoadedImage2">Material Loaded – Image 2</label>
+                    <div class="upload-section">
+                        <img [src]="sanitizeImageUrl(files[4].imgFakepath)" *ngIf="files[4]?.imgFakepath"
+                            class="upimg" />
+
+                        <mat-icon *ngIf="files[4]?.imgFakepath">sync_alt</mat-icon>
+                        <div>
+                            <input class="inputfile" type="file" id="MaterialLoadedImage2" ngModel
+                                name="MaterialLoadedImage2" (change)="selectFile($event,4)"
+                                accept="image/png, image/jpeg, image/jpg" required />
+                            <label for="MaterialLoadedImage2">Choose a file</label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="MaterialLoadedImage3">Material Loaded – Image 3</label>
+                    <div class="upload-section">
+                        <img [src]="sanitizeImageUrl(files[5].imgFakepath)" *ngIf="files[5]?.imgFakepath"
+                            class="upimg" />
+
+                        <mat-icon *ngIf="files[5]?.imgFakepath">sync_alt</mat-icon>
+                        <div>
+                            <input class="inputfile" type="file" id="MaterialLoadedImage3" ngModel
+                                name="MaterialLoadedImage3" (change)="selectFile($event,5)"
+                                accept="image/png, image/jpeg, image/jpg" required />
+                            <label for="MaterialLoadedImage3">Choose a file</label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <button type="submit" mat-flat-button color="accent">Upload</button>
+    </form>
+</div>

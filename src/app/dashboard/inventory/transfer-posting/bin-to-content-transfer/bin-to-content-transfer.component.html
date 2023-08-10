@@ -1,0 +1,133 @@
+<div class="page-wrap">
+    
+    <div class="heading result">
+        <div class="head">
+            <h1>Bin to Content Transfer</h1>
+            <mat-slide-toggle
+            color="primary"
+            [(ngModel)]="hhtScanEnabled"
+            (change)="hhtScanToggle($event)"
+            >USE HHT Device</mat-slide-toggle
+          >
+          </div>
+        <div><br>
+            <div class="item">
+                <p>Client Id: <span>{{clientId }} </span></p>
+                <p *ngIf="whLocation">From BIN: <span>{{whLocation }} </span></p>
+                <p *ngIf="sku">SKU: <span>{{sku}} </span></p>
+                <p *ngIf="toBin">To BIN: <span>{{toBin}} </span></p>
+                <button *ngIf="sku" mat-raised-button color="primary" (click)="getBinBtn()" >Get Bin</button>
+                
+            </div> 
+           
+        </div>
+       
+    </div>
+    <div class="find-picklist" [ngStyle]="{'display':toBin?.length > 0 ? 'none' : 'block'}">
+        <form class="example-form" (ngSubmit)="search(f)" #f="ngForm" *ngIf="!whLocation">
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Bin Search</mat-label>
+                            <input matInput ngModel name="bin" required (keyup)="changeLPN($event)"
+                            autocomplete="off" autofocus />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f.valid || hhtScanEnabled">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form class="example-form" (ngSubmit)="skuScan(f1)" #f1="ngForm" *ngIf="whLocation"
+        [ngStyle]="{'display':table?.length > 0 ? 'none' : 'block'}">
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Scan Sku</mat-label>
+                            <input matInput ngModel name="sku" required (keyup)="changeSku($event)"
+                            autocomplete="off" width="90%" autofocus />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button style="margin: 5px;" mat-flat-button color="accent" [disabled]="!f1.valid || hhtScanEnabled">
+                            <mat-icon>search</mat-icon> Scan
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form class="example-form" (ngSubmit)="ToBinScan(f2)" #f2="ngForm" *ngIf="table?.length > 0"
+            >
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Scan To-Bin</mat-label>
+                            <input matInput ngModel name="toBin" required (keyup)="changeToBin($event)"
+                            autocomplete="off" width="90%" autofocus/>
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button style="margin: 5px;" mat-flat-button color="accent" [disabled]="!f2.valid || hhtScanEnabled">
+                            <mat-icon>search</mat-icon> Scan
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+     <div class="find-picklist" *ngIf="table?.length > 0"> 
+        <table class="tbl-class">
+            <tr>
+               <th>SLOC</th>
+               <th>SKU</th>
+               <th>QTY</th>
+               <th>BAL QTY</th>
+               <th>BATCHNO</th>
+               
+            </tr>
+            <tr *ngFor="let items of table; index as i">
+                <td>
+                    <mat-radio-button class="example-radio-button" [value]="items.SLOC" [checked]="i === 0"  (click)="getTableSloc(items.SLOC)"
+                    >
+                        {{items.SLOC}}
+                    </mat-radio-button>
+                </td>
+                <td>{{items.SKU}}</td>
+                <td>{{ items.QTY }}</td>
+                <td>{{ items.AVAILABLEQTY }}</td>
+                <td>{{ items.BATCHNO }}</td>
+            </tr> 
+        </table>
+          
+        <form class="example-form" (ngSubmit)="qtySave(f3)" #f3="ngForm" *ngIf="toBin">
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Enter Transfer QTY</mat-label>
+                            <input matInput ngModel type="number" name="qty" required
+                            autocomplete="off" width="90%" autofocus/>
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button style="margin: 5px;" mat-flat-button color="accent" [disabled]="!f3.valid">
+                            <mat-icon>save</mat-icon> Save
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div class="example-button-row" *ngIf="toBin">
+        <button mat-raised-button color="primary" (click)="backToBin()" >Back To BIN</button>
+        <button mat-raised-button color="primary" (click)="backToSku()">Back To SKU</button>
+        <button mat-raised-button color="primary" (click)="backToToBIN()">Back To To-BIN</button>
+        
+    </div>
+    </div> 
+</div>

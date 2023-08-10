@@ -1,0 +1,27 @@
+<div class="page-wrap">
+    <div class="heading result">
+        <div>
+            <h1>Total Open MDN</h1>
+        </div>
+    </div>
+<div *ngIf="error; else list;">{{errorMsg}}</div>
+    <ng-template #list >
+        <div *ngIf="listItems.length">
+        <a *ngFor="let item of listItems" routerLink="{{item.mdnno}}" >
+            <mat-card>
+
+                <p><span>MDN: </span>{{item?.mdnno}}</p>
+                <p><span>INV: </span>{{item?.invoiceno}}</p>
+                <p><span>Client: </span>{{item?.client}}</p>
+
+            </mat-card>
+        </a>
+    </div>
+    <mat-paginator [length]='numberOfRecords'
+    [pageSize]="3"
+    (page)="onPaginateChange($event)">
+</mat-paginator>
+    </ng-template>
+
+
+</div>

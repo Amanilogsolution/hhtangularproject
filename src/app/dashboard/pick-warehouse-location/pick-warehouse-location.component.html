@@ -1,0 +1,9 @@
+<p mat-title>Select a Warehouse Location</p>
+
+<mat-form-field appearance="standard">
+  <mat-label>Choose Warehouse Location</mat-label>
+  <select matNativeControl #location (change)="onChage()">
+    <option value="">Select</option>
+    <option [value]="i" *ngFor="let warehouse of data; let i=index">{{warehouse.WHNAME}}</option>
+  </select>
+</mat-form-field>

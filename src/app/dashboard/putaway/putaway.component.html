@@ -1,0 +1,138 @@
+<div class="page-wrap">
+    <div class="heading result">
+        <div class="head">
+            <h1>PUT AWAY</h1>
+            <mat-slide-toggle color="primary"  [(ngModel)]="hhtScanEnabled" (change)="hhtScanToggle($event)
+            ">USE HHT Device</mat-slide-toggle>
+        </div>
+        <div class="info" *ngIf="lpndata">
+            <p>LPN: <span>{{lpndata?.lpn}}</span></p>
+            <p>Total LPN Qty: <span>{{lpndata?.TotLPNQty}}</span></p>
+            <p>Total Putaway Qty: <span>{{lpndata?.TotalPutwayQty}}</span></p>
+            <p>Cust ID: <span>{{lpndata?.custId}}</span></p>
+            <p>Invoice: <span>{{lpndata?.custInv}}</span></p>
+            <p>MRN: <span>{{lpndata?.mrnNo}}</span></p>
+        </div>
+    </div>
+    <div class="scanBox">
+        <form class="example-form" (ngSubmit)="findLPN(f)" #f="ngForm">
+
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>SCAN LPN</mat-label>
+                            <input matInput ngModel name="WhLocation" required (keyup)="changeLPN($event)"
+                                autocomplete="off" />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f.valid ||  hhtScanEnabled">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                    <td width="97">
+                        <button type="button" mat-flat-button color="primary" (click)="scanLPN()">
+                            <mat-icon>qr_code_scanner</mat-icon> SCAN
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </form>
+    </div>
+
+
+    <div class="scanBox" *ngIf="lpnValid">
+        <form class="example-form" (ngSubmit)="findRack(f1)" #f1="ngForm">
+
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>SCAN Rack/BIN</mat-label>
+                            <input matInput ngModel name="location" required (keyup)="changeRack($event)"
+                                autocomplete="off" />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f1.valid  || hhtScanEnabled">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                    <td width="97">
+                        <button type="button" mat-flat-button color="primary" (click)="scanRack()">
+                            <mat-icon>qr_code_scanner</mat-icon> SCAN
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </form>
+    </div>
+
+
+    <div class="scanBox" *ngIf="lpnValid && rackValid">
+        <form class="example-form" (ngSubmit)="findSku(f2)" #f2="ngForm">
+
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>SCAN SKU</mat-label>
+                            <input matInput ngModel name="sku" required (keyup)="changeSKU($event)"
+                                autocomplete="off" />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f2.valid ||  hhtScanEnabled">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                    <td width="97">
+                        <button type="button" mat-flat-button color="primary" (click)="scanSKU()">
+                            <mat-icon>qr_code_scanner</mat-icon> SCAN
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </form>
+    </div>
+    <ng-container *ngIf="showform && lpnValid && rackValid">
+
+
+            <div> Total Qty: {{skuData?.TotLPNSKUQty}}
+            </div>
+            <div>
+                Putaway at other location: {{skuData?.totalPutWay}}
+            </div>
+            <form class="example-form" (ngSubmit)="updateQty(f3)" #f3="ngForm">
+                <table style="width: 100%;">
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Puttaway Qty</mat-label>
+                                <input type="number"
+                                matInput ngModel name="qty" required
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </td>
+                        <td width="113">
+                            <button mat-flat-button color="accent" [disabled]="!f3.valid">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+
+        </form>
+    </ng-container>
+
+</div>

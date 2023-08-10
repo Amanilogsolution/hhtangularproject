@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <button (click)="goback()" mat-icon-button aria-label="Go back to previous screen">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <button mat-icon-button aria-label="Toggle side menu" (click)="toggleSideNav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <a routerLink="/dashboard/summary" mat-button><span>SWIM</span></a>
+  <span class="spacer"></span>
+  <button mat-icon-button aria-label="Log out" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>

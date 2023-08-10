@@ -1,0 +1,32 @@
+.loginform {
+    padding: 20px 15px;
+    max-width: 500px;
+    margin: auto;
+
+    background-color: #f1f1f1;
+
+    .mat-form-field {
+        width: 100%;
+    }
+
+    h1 {
+        text-align: center;
+    }
+    p{
+        text-align: center;
+    }
+}
+.login-page{
+    background-color: #3f51b5;
+    min-height: 100vh;
+    padding: 100px 15px;
+    box-sizing: border-box;
+}
+.error{
+    color: maroon;
+    display:block;
+    margin-bottom: 10px;
+    .mat-icon{
+        vertical-align: middle;
+    }
+}

@@ -1,0 +1,16 @@
+.videoScan{
+    width: 100%;
+    min-height: 200px;
+}
+.page-wrap{
+    min-height:calc(100vh - 116px) ;
+}
+.mat-form-field{
+    display: block;
+}
+.result{
+    color: green;
+    &.error{
+        color: red;
+    }
+}

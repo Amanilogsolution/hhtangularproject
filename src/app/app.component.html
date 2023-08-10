@@ -1,0 +1,7 @@
+<router-outlet></router-outlet>
+<app-connection-status *ngIf="connectionStatus == 'offline'" [onlineStatusMessage]="connectionStatusMessage" [onlineStatus]="connectionStatus">
+</app-connection-status>
+<div class="spinner-wrap" *ngIf="appLoading">
+
+<mat-spinner class="spinner"></mat-spinner>
+</div>

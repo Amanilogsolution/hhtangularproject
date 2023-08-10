@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<form class="example-form" (ngSubmit)="scanDone(f)" #f="ngForm">
+
+
+    <table style="width: 100%;">
+        <tr>
+            <td>
+                <mat-form-field class="example-full-width">
+                    <mat-label>Search SKU</mat-label>
+                    <input matInput ngModel name="sku" required  />
+                </mat-form-field>
+            </td>
+            </tr>
+        <tr>
+            <td align="right">
+                <button mat-flat-button color="accent" [disabled]="!f.valid">
+                    +1
+                </button>
+                </td>
+
+        </tr>
+    </table>
+
+
+</form>

@@ -1,0 +1,133 @@
+<div class="page-wrap">
+    <div class="heading result">
+        <div>
+            <div class="item">
+                <p>ASN List: <span>{{asnNo}} </span></p>
+                <p *ngIf="item?.poNo    ">PO No.: <span>{{item?.poNo}} </span></p>
+                <p>Invoice No: <span>{{item?.invoiceNo}} </span></p>
+                <p>Total Qty.: <span>{{item?.asnQty}} </span></p>
+                <p>Total Scan Qty.: <span>{{item?.scanQty}} </span></p>
+                <p>LPN/BOX: <span>{{boxNo}} </span></p>
+                <p>SKU: <span>{{sku}} </span></p>
+                <p  *ngIf="skulist.length">Scan Qty: <span>{{skulist[0].scanQty}} </span></p>
+                <p *ngIf="skulist.length && skulist[0].scanNumByWhLocation">Total Scan in Current LPN: <span>{{skulist[0].scanNumByWhLocation}} </span></p>
+                <p *ngIf="item?.totalSkuCode">Total SKU in Asn: <span>{{item?.totalSkuCode}} </span></p>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="scanBox">
+        <form class="example-form" (ngSubmit)="searchBox(f)" #f="ngForm">
+
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Search BOX/LPN</mat-label>
+                            <input matInput ngModel name="WHLocation" autocomplete="off" required (keyup)="changeBox()" />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f.valid">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                        </td>
+                        <td width="97">
+                        <button type="button" mat-flat-button color="primary" (click)="scanASN()">
+                            <mat-icon>qr_code_scanner</mat-icon> SCAN
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </form>
+    </div>
+
+    <div class="scanBox" *ngIf="boxNoValid">
+        <form class="example-form" (ngSubmit)="searchSKU(f1)" #f1="ngForm" >
+
+            <input type="checkbox" name="httscan" (change)="hhtToggle($event)" /> Use HTT Device
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Search SKU</mat-label>
+                            <input matInput name="sku" required
+                            (keyup)="changeSKU($event)"
+                            ngModel
+                            autocomplete="off"
+                          />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f1.valid ||  hhtScanEnabled">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                    <td width="97">
+                        <button  type="button" mat-flat-button color="primary" (click)="scanSKU()">
+                            <mat-icon>qr_code_scanner</mat-icon> SCAN
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </form>
+    </div>
+
+    <div *ngIf="boxNoValid && skuValid">
+        <form class="example-form" (ngSubmit)="updateSKU(f12)" #f12="ngForm">
+
+            <div class="form-inline" *ngFor='let item of skulist'>
+                <div>
+                    SkU
+                </div>
+                <div>
+                    ASN QTY
+                </div>
+                <div>
+                    Update
+                </div>
+                <div>
+                    {{sku}}
+                </div>
+                <div>
+                    {{item.asnQty}} ({{item.scanNumByWhLocation}})
+                </div>
+                <div>
+
+                    <mat-form-field class="example-full-width">
+
+                        <input matInput placeholder="QTY" ngModel name="qty" required type="number"
+                        autocomplete="off" />
+                    </mat-form-field>
+
+                </div>
+
+
+            </div>
+            <button class="up-btn" mat-flat-button color="accent" [disabled]="!f12.valid  ">
+                Update
+            </button>
+
+
+            <button type="button" class="up-btn" mat-flat-button color="primary" (click)="updateQty()">
+                <mat-icon>qr_code_scanner</mat-icon> SCAN
+            </button>
+        </form>
+        <!-- <div  class="htt-opt" *ngIf="boxNoValid">
+        <p>OR</p>
+        <button class="up-btn" mat-flat-button color="warn" (click)="httModal()">
+            <mat-icon>qr_code_scanner</mat-icon> USE HHT Device
+        </button>
+        </div> -->
+
+    </div>
+
+
+
+</div>

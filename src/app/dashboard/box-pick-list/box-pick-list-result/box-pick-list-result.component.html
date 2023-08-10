@@ -1,0 +1,57 @@
+<div class="page-wrap">
+    <div class="heading result">
+        <div class="head">
+            <h1>Pick List</h1>
+            <mat-slide-toggle color="primary" [(ngModel)]="hhtScanEnabled" (change)="hhtScanToggle($event)
+            ">USE HHT Device</mat-slide-toggle>
+        </div>
+        <div class="mat-grid">
+            <div class="mat-item" *ngIf="picklist">
+                <p><span>DN No:</span> {{picklist}} </p>
+            </div>
+            <div class="mat-item" *ngIf="custinvno">
+                <p><span>Order No:</span> {{custinvno}} </p>
+            </div>
+            <div class="mat-item">
+                <p><span>Total Qty:</span> {{InvQty||0}} </p>
+            </div>
+            <div class="mat-item">
+                <p><span>Total Scan:</span> {{PickQTy||0}} </p>
+            </div>
+        </div>
+    </div>
+    <div class="find-picklist">
+        <form class="example-form" (ngSubmit)="search(f)" #f="ngForm">
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Search Zone</mat-label>
+                            <input matInput ngModel name="zoneBarcode" #zoneBarcode required (keyup)="changeZone($event)"
+                                autocomplete="off" autofocus  />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f.valid">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div *ngIf="error; else list;">{{errorMsg}}</div>
+    <ng-template #list>
+        <a *ngFor="let item of pickListDetails">
+            <mat-card>
+                <h2>{{item.location}}</h2>
+                <p><span>Zone: </span>{{item.zone}}</p>
+                <p><span>Total Qty: </span>{{item.totalQty}}</p>
+                <p><span>Total Picked: </span>{{item.totalScanned}}</p>
+                <p><span>ZoneBar Code: </span>{{item.zoneBarCode}}</p>
+            </mat-card>
+        </a>
+    </ng-template>
+    <mat-paginator *ngIf="numberOfRecords" [length]='numberOfRecords' [pageSize]="3" (page)="onPaginateChange($event)">
+    </mat-paginator>
+</div>

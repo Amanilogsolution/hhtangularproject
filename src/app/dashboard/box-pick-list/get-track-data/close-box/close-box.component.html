@@ -1,0 +1,10 @@
+<div class="main">
+<h1 mat-dialog-title> {{data.boxno}}</h1>
+<div mat-dialog-content>
+  <p>Are you sure to Close box?</p>
+</div>
+<div mat-dialog-actions style="margin:10px;">
+  <button mat-button (click)="onNoClick()">No</button>
+  <button mat-button cdkFocusInitial (click)="onClick()">Yes</button>
+</div>
+</div>

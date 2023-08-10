@@ -1,0 +1,9 @@
+<p mat-title>Select a Client</p>
+
+<mat-form-field appearance="standard">
+  <mat-label>Choose Client</mat-label>
+  <select matNativeControl (change)="onChage()">
+    <option value="">Select</option>
+    <option [value]="i" *ngFor="let client of data.clientData; let i=index">{{client.CLIENT}}</option>
+  </select>
+</mat-form-field>

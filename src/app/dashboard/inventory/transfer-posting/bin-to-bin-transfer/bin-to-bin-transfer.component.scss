@@ -1,0 +1,44 @@
+.heading .item{
+    display: grid;
+    grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+    width: 100%;
+    text-decoration: none;
+    margin-bottom: 15px;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    padding-top: 10px;
+    span{
+        color: #000;
+    }
+}
+
+.head {
+    display: flex;
+    justify-content: space-between;
+}
+.find-picklist{
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #f1f1f1;
+    p{
+        text-align: center;
+    }
+}
+.tbl-class{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    border: 1px solid black;
+  }
+
+  .tbl-class td, th {
+    border: 1px solid black;
+  }
+  .example-button-row {
+    display: table-cell;
+    width: 490px;
+  }
+  
+  .example-button-row .mat-button-base {
+    margin: 8px 8px 8px 0;
+  }

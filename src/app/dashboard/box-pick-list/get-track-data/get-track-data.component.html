@@ -1,0 +1,195 @@
+<div class="page-wrap">
+    <div class="heading result">
+        <!-- <div>
+        	<p><span>DN No:</span> {{picklist}} </p>
+        </div> -->
+        <div class="mat-grid">
+            <div>
+                <p><span>DN No:</span> {{picklist}} </p>
+            </div>
+            <div class="mat-item">
+                <p><span>Order No:</span> {{custinvno}} </p>
+            </div>
+            <div class="mat-item">
+                <p><span>Total Qty:</span> {{InvQty||0}} </p>
+            </div>
+            <div class="mat-item">
+                <p><span>AISLES:</span> {{aisles}} </p>
+            </div>
+            <div class="mat-item">
+                <p><span>Total Scan:</span> {{PickQTy||0}} </p>
+            </div>
+            <div class="mat-item">
+                <p><span>Total Aisles:</span>{{totalAisles}} </p>
+            </div>
+            <div class="mat-item">
+                <p><span>Zone:</span> {{zoneBarcode}} </p>
+            </div>
+            <div class="mat-item">
+                <p><span>Picked in Aisles:</span>{{pickedAisles}}</p>
+            </div>
+            <div class="mat-item">
+                <p><span>Box No:</span>{{boxno}} </p>
+            </div>
+            <div class="mat-item">
+                <p><span>Total in Box:</span>{{numberOfBox}} </p>
+            </div>
+        </div>
+        <div class="head">
+            <h1>Search Aisles</h1>
+            <mat-slide-toggle color="primary" [(ngModel)]="hhtScanEnabled" (change)="hhtScanToggle($event)
+            ">USE HHT Device</mat-slide-toggle>
+        </div>
+    </div>
+
+    <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedTabChange)="onTabChanged($event);">
+        <mat-tab label="Scan Box" [disabled]="!location" [disabled]="!sku" [disabled]="location" [disabled]="sku">
+            <form class="searchform" (ngSubmit)="boxSearch(f)" #f="ngForm">
+
+                <table style="width: 100%;">
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Search Box</mat-label>
+                                <input matInput ngModel name="boxno" #inputBoxno required autocomplete="off"
+                                    (keyup)="changeLPN($event)" autofocus />
+                            </mat-form-field>
+                        </td>
+                        <td width="113">
+                            <button mat-flat-button color="accent" [disabled]="!f.valid ||  hhtScanEnabled">
+                                <mat-icon>search</mat-icon> Next
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </mat-tab>
+        <mat-tab label="Scan Location" [disabled]="!boxno" [disabled]="boxno" [disabled]="!sku" [disabled]="sku">
+            <form class="searchform" (ngSubmit)="searchLocation(f2)" #f2="ngForm">
+
+                <table style="width: 100%;">
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Search Rack Location</mat-label>
+                                <input matInput ngModel name="location" #inputLocation required autocomplete="off"
+                                    (keyup)="changeLocatoin($event)" autofocus />
+                            </mat-form-field>
+                        </td>
+                        <td width="113">
+                            <button mat-flat-button color="accent" [disabled]="!f2.valid ||  hhtScanEnabled">
+                                <mat-icon>search</mat-icon> Next
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </mat-tab>
+        <mat-tab label="Scan SKU" [disabled]="!location">
+            <form class="searchform" (ngSubmit)="searchSku(f3)" #f3="ngForm">
+
+                <table style="width: 100%;">
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Search SKU</mat-label>
+                                <input matInput ngModel name="sku" #inputSku required autocomplete="off"
+                                    (keyup)="changeSku($event)" autofocus />
+                            </mat-form-field>
+                        </td>
+                        <td width="113">
+                            <button mat-flat-button color="accent" [disabled]="!f3.valid ||  hhtScanEnabled">
+                                <mat-icon>search</mat-icon> Show Results
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </mat-tab>
+    </mat-tab-group>
+    <div *ngIf="error; else list;">{{errorMsg}}</div>
+
+    <ng-template #list>
+        <a *ngFor="let item of getTrackData">
+            <mat-card>
+                <h2>{{item.location}}</h2>
+                <p><span>Rack Location: </span>{{item.whLocation}}</p>
+                <p><span>Total Qty: </span>{{item.totalQty}}</p>
+                <p><span>Total Picked: </span>{{item.totalScanned}}</p>
+                <p><span>Total Sku: </span>{{item.totalSku}}</p>
+
+            </mat-card>
+        </a>
+    </ng-template>
+
+    <mat-paginator *ngIf="!rackData?.length;" [length]='numberOfRecords' [pageSize]="3"
+        (page)="onPaginateChangeData($event)">
+    </mat-paginator>
+
+
+    <div display="block">
+        <a (click)="manualUpdate(item)" *ngFor="let item of rackData">
+            <mat-card>
+                <p><span>SKU: </span>{{item.skuCode}}</p>
+                <p><span>Description: </span>{{item.skudesc}}</p>
+                <p><span>Batch: </span>{{item.batchno}}</p>
+                <mat-divider></mat-divider>
+                <div class="item">
+                    <p><span>INV </span>{{item.inv||0}}</p>
+                    <p><span>PCK </span>{{item.pck||0}}</p>
+                </div>
+            </mat-card>
+        </a>
+
+        <table style="width: 100%;" *ngIf="!getTrackData?.length;">
+            <tr>
+                <td width="113">
+                    <button mat-flat-button color="accent" (click)="skuPreviousPaginate(numberOfPage)"
+                        [disabled]="numberOfPage < 1" [disabled]="numberOfPage == 1">
+                        <mat-icon>arrow_back</mat-icon> Back to old Sku
+                    </button>
+                </td>
+                <td align="center">{{numberOfPage}} of {{numberOfRecords}} </td>
+                <td width="113">
+                    <button mat-flat-button color="accent" (click)="skuNextPaginate(numberOfPage)"
+                        [disabled]="numberOfRecords == numberOfPage">
+                        Go to Next Sku <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+        <table style="width: 100%;" *ngIf="!getTrackData?.length;">
+            <tr>
+                <td width="110">
+                    <button mat-flat-button color="accent" (click)="backToAisles()">
+                        <mat-icon>arrow_back</mat-icon> Back To Aisles
+                    </button>
+                </td>
+                <td align="center">&nbsp;</td>
+                <td width="100">
+                    <button mat-flat-button color="accent" (click)="changeBox()">
+                        <mat-icon>search</mat-icon> Change Box
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td width="113">
+                    <button mat-flat-button color="accent" (click)="backToRackLocation()">
+                        <mat-icon>arrow_back</mat-icon> Back to Rack
+                    </button>
+                </td>
+                <td align="center">&nbsp;</td>
+                <td width="113">
+                    <button mat-flat-button color="accent" (click)="closeBox()">
+                        <mat-icon>block</mat-icon> Close Box
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+        <!-- <mat-paginator *ngIf="!getTrackData?.length;" [length]='numberOfRecords'  [pageSize]="1" (page)="onPaginateChange($event)">
+        </mat-paginator> -->
+    </div>
+
+</div>

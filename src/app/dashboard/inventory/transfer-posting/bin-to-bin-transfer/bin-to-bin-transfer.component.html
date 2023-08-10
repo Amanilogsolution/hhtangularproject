@@ -1,0 +1,83 @@
+<div class="page-wrap">
+    
+    <div class="heading result">
+        <div class="head">
+            <h1>Bin to Bin Transfer</h1>
+            <mat-slide-toggle
+            color="primary"
+            [(ngModel)]="hhtScanEnabled"
+            (change)="hhtScanToggle($event)"
+            >USE HHT Device</mat-slide-toggle
+          >
+          </div>
+        <div><br>
+            <div class="item">
+                <p>Client Id: <span>{{clientId }} </span></p>
+                <p *ngIf="whLocation">From BIN: <span>{{whLocation }} </span></p>
+                <p *ngIf="tobin">To Bin: <span>{{tobin}} </span></p>
+                
+            </div> 
+           
+        </div>
+       
+    </div>
+    <div class="find-picklist">
+        <form class="example-form" (ngSubmit)="search(f)" #f="ngForm" *ngIf="!whLocation">
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>From Bin Search</mat-label>
+                            <input matInput autofocus ngModel name="bin" required (keyup)="changeLPN($event)"
+                            autocomplete="off"  />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f.valid || hhtScanEnabled">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form class="example-form" (ngSubmit)="tobinScan(f1)" #f1="ngForm" *ngIf="whLocation">
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>To Bin Scan</mat-label>
+                            <input matInput autofocus ngModel name="tobin" required (keyup)="changeSku($event)"
+                            autocomplete="off" width="90%" />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button style="margin: 5px;" mat-flat-button color="accent" [disabled]="!f1.valid || hhtScanEnabled">
+                            <mat-icon>search</mat-icon> Scan
+                        </button>
+
+                        <button mat-raised-button color="primary" (click)="save()" *ngIf="tobin">SAVE</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+     <div class="find-picklist" *ngIf="fromBinData?.length > 0"> 
+        <table class="tbl-class">
+            <tr>
+               <th>SKU</th>
+               <th>Batch No.</th>
+               <th>Bal QTY</th>
+               <th>SLOCK</th>
+            </tr>
+            <tr *ngFor="let items of fromBinData">
+                <td>{{ items.sku }}</td>
+                <td>{{ items.batchNo }}</td>
+                <td>{{ items.balqty }}</td>
+                <td>{{ items.sloc }}</td>
+            </tr> 
+        </table>
+        <div class="example-button-row">
+        <button mat-raised-button color="primary" (click)="backToBin()" >Back To BIN</button>
+    </div>
+    </div> 
+</div>

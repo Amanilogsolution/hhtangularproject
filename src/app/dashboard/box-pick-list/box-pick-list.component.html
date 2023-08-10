@@ -1,0 +1,29 @@
+<div>
+    <a routerLink="/dashboard/box-pick-list/pending" mat-raised-button color="primary" class="btn">PENDING PICKLIST</a>
+    <div class="find-picklist">
+
+        <form class="example-form" (ngSubmit)="search(f)" #f="ngForm">
+
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Search for Picklist</mat-label>
+                            <input matInput ngModel name="picklist" required autocomplete="off"/>
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f.valid">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </form>
+        <p>OR</p>
+        <a routerLink="/dashboard/box-pick-list/scan" mat-flat-button color="primary" class="btn">Scan for Picklist</a>
+    </div>
+</div>

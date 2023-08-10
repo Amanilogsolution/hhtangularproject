@@ -1,0 +1,6 @@
+.result{
+    color: green;
+    &.error{
+        color: red;
+    }
+}

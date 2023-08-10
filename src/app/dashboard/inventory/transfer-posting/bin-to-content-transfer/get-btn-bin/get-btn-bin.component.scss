@@ -1,0 +1,28 @@
+
+
+  .item-heading  {
+    display: grid;
+    grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+    width: 100%;
+    text-decoration: none;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    padding-top: 10px;
+    font-weight: bold;
+    span{
+        color: #000;
+    }
+  }
+  .item{
+    display: grid;
+    grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+    width: 100%;
+    text-decoration: none;
+    margin-bottom: 15px;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    padding-top: 5px;
+    span{
+        color: #000;
+    }
+}

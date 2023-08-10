@@ -1,0 +1,106 @@
+<div class="page-wrap">
+    <div class="heading result">
+        <div class="head">
+            <h1>PUT AWAY BOX</h1>
+            <mat-slide-toggle color="primary"  [(ngModel)]="hhtScanEnabled" (change)="hhtScanToggle($event)
+            ">USE HHT Device</mat-slide-toggle>
+        </div>
+        <div class="info" *ngIf="lpndata">
+            <p>LPN: <span>{{lpndata?.lpn}}</span></p>
+            <p>Total LPN Qty: <span>{{lpndata?.TotLPNQty}}</span></p>
+            <p>Total Putaway Qty: <span>{{lpndata?.TotalPutwayQty}}</span></p>
+            <p>Cust ID: <span>{{lpndata?.custId}}</span></p>
+            <p>Invoice: <span>{{lpndata?.custInv}}</span></p>
+            <p>MRN: <span>{{lpndata?.mrnNo}}</span></p>
+        </div>
+    </div>
+    <div class="scanBox">
+        <form class="example-form" (ngSubmit)="findLPNBOX(f)" #f="ngForm">
+
+
+            <table style="width: 100%;">
+                <tr>
+                    <td width="100%">
+                        <mat-form-field class="example-full-width" style="width: 280px;">
+                            <mat-label>SCAN LPN/BOX</mat-label>
+                            <input matInput ngModel name="WhLocation" required (keyup)="changeLPN($event)"
+                                autocomplete="off" />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f.valid ||  hhtScanEnabled">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </form>
+    </div>
+
+    <div class="scanBox" *ngIf="lpnGridData">
+        <form class="example-form" (ngSubmit)="findRack(f1)" #f1="ngForm">
+
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width" style="width: 280px;">
+                            <mat-label>SCAN Rack/BIN</mat-label>
+                            <input matInput ngModel name="location" required (keyup)="changeRack($event)"
+                                autocomplete="off" />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f1.valid  || hhtScanEnabled">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </form>
+    </div>
+
+    <div class="scanBox" *ngIf="lpndata && rackValid">
+        <form class="example-form" (ngSubmit)="updateQty(f2)" #f2="ngForm">
+
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <button mat-flat-button color="primary">
+                             PUTAWAY SAVE
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </form>
+    </div>
+
+    <div class="heading result" style="margin-top: 2%;" *ngIf="lpnGridData">
+        <table class="tbl-class">
+            <tr>
+               <th>Wh Location</th>
+               <th>QTY</th>
+               <th>SKU</th>
+            </tr>
+            <tr *ngFor="let gridData of lpnGridData">
+                <td>{{ gridData.whlocation }}</td>
+                <td>{{ gridData.QTY }}</td>
+                <td>{{ gridData.sku }}</td>
+                
+            </tr>
+        </table>
+    </div>
+    
+
+
+    
+    
+
+</div>

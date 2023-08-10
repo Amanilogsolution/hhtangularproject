@@ -1,0 +1,493 @@
+<?php
+include_once ("./config/connection.php");
+error_reporting(0);
+class Api extends Database
+{
+    private $conn;
+	private $tbl_asnData;
+	private $tbl_asnSub;
+	private $tbl_mdnData;
+	private $tbl_mdnSub;
+    private $tbl_pickingdata;
+    private $tbl_login;
+    private $users_tbl;
+    private $tbl_whmaster;
+	
+    public function __construct()
+    {
+        $this->connect();
+        $this->tbl_asnSub = "TBL_ASNSUB";
+		$this->tbl_asnData = "Tbl_ASNDATA";
+		$this->tbl_login = "TBL_LOGIN";
+        $this->tbl_pickingdata = "tbl_PICKINGDATA";
+        $this->users_tbl = "User_Rights";
+        $this->tbl_whmaster = "tbl_whmaster";
+		$this->tbl_mdnSub = "TBL_MDNSUB";
+		$this->tbl_mdnData = "Tbl_MDNDATA";
+    }
+	public function uploadBlob($filetoUpload, $storageAccount, $containerName, $blobName, $destinationURL, $accesskey)
+	{
+		$responceArray = array();
+		// for ($k = 0; $k < count($filetoUpload); $k++) 
+		// {
+			
+		if($filetoUpload!='')
+			{
+				$error=array();
+				$extension=array("jpeg","jpg","png","gif");
+				foreach($_FILES["files"]["tmp_name"] as $key=>$tmp_name) {
+					$file_name=$_FILES["files"]["name"][$key];
+					$file_tmp=$_FILES["files"]["tmp_name"][$key];
+					$ext=pathinfo($file_name,PATHINFO_EXTENSION);
+				
+					if(in_array($ext,$extension)) {
+						if(!file_exists("photo_gallery/".$txtGalleryName."/".$file_name)) {
+							move_uploaded_file($file_tmp=$_FILES["files"]["tmp_name"][$key],"photo_gallery/".$txtGalleryName."/".$file_name);
+						}
+						else {
+							$filename=basename($file_name,$ext);
+							$newFileName=$filename.time().".".$ext;
+							move_uploaded_file($file_tmp=$_FILES["files"]["tmp_name"][$key],"photo_gallery/".$txtGalleryName."/".$newFileName);
+						}
+					}
+					else {
+						array_push($error,"$file_name, ");
+					}
+				}
+				$valid_ext = array('png','jpeg','jpg');
+				$photoExt1 = @end(explode('.', $filetoUpload)); // explode the image name to get the extension
+				$phototest1 = strtolower($photoExt1);
+				$new_profle_pic = time().'.'.$phototest1;
+				//$location = "./images/".$new_profle_pic;
+				$file_extension = pathinfo($new_profle_pic, PATHINFO_EXTENSION);
+				$file_extension = strtolower($file_extension);
+				
+				if(in_array($file_extension,$valid_ext))
+				{
+					$this->compressedImage($_FILES['image']['tmp_name'],$location,12);
+					$blobName = 'images';
+					$filetoUploa = realpath('images/'.$new_profle_pic);
+					
+					$currentDate = gmdate("D, d M Y H:i:s T", time());
+					$handle = fopen($filetoUploa, "w");
+					$fileLen = filesize($filetoUploa);
+					$headerResource = "x-ms-blob-cache-control:max-age=3600\nx-ms-blob-type:BlockBlob\nx-ms-date:$currentDate\nx-ms-version:2015-12-11";
+					$urlResource = "/$storageAccount/$containerName/$blobName";
+					
+					$arraysign = array();
+					$arraysign[] = 'PUT';               /*HTTP Verb*/  
+					$arraysign[] = '';                  /*Content-Encoding*/  
+					$arraysign[] = '';                  /*Content-Language*/  
+					$arraysign[] = $fileLen;            /*Content-Length (include value when zero)*/  
+					$arraysign[] = '';                  /*Content-MD5*/  
+					$arraysign[] = 'image/png';         /*Content-Type*/  
+					$arraysign[] = '';                  /*Date*/  
+					$arraysign[] = '';                  /*If-Modified-Since */  
+					$arraysign[] = '';                  /*If-Match*/  
+					$arraysign[] = '';                  /*If-None-Match*/  
+					$arraysign[] = '';                  /*If-Unmodified-Since*/  
+					$arraysign[] = '';                  /*Range*/  
+					$arraysign[] = $headerResource;     /*CanonicalizedHeaders*/
+					$arraysign[] = $urlResource;        /*CanonicalizedResource*/
+				
+					$str2sign = implode("\n", $arraysign);
+				
+					$sig = base64_encode(hash_hmac('sha256', urldecode(utf8_encode($str2sign)), base64_decode($accesskey), true));  
+					$authHeader = "SharedKey $storageAccount:$sig";
+				
+					$headers = [
+						'Authorization: ' . $authHeader,
+						'x-ms-blob-cache-control: max-age=3600',
+						'x-ms-blob-type: BlockBlob',
+						'x-ms-date: ' . $currentDate,
+						'x-ms-version: 2015-12-11',
+						'Content-Type: image/png',
+						'Content-Length: ' . $fileLen
+					];
+				
+					$ch = curl_init($destinationURL);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+					curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+					curl_setopt($ch, CURLOPT_INFILE, $handle); 
+					curl_setopt($ch, CURLOPT_INFILESIZE, $fileLen); 
+					curl_setopt($ch, CURLOPT_UPLOAD, true); 
+					$result = curl_exec($ch);
+					//
+					echo ('Result<br/>');
+					print_r($result);
+					//
+					echo ('Error<br/>');
+					print_r(curl_error($ch));
+					//
+					curl_close($ch);
+		
+					//$sql = mysqli_query($this->myconn, "INSERT INTO gallery SET image = '".$new_profle_pic."', updated_at = '".$timeNdate1."', created_at='".$timeNdate1."'");
+					// if($sql==true){
+						// return $responceArray = 'Image saved successfully';
+					// }else{
+						// return $responceArray = 'Image not saved! Please try again ';
+					// }
+					return $responceArray = 'Image saved successfully';
+				}else{
+					return $responceArray = 'Image not saved! Please check image type';
+				}
+			}
+		//}
+	}
+	public function compressedImage($source, $path, $quality) 
+	{
+           $info = getimagesize($source);
+           if ($info['mime'] == 'image/jpeg') 
+               $image = imagecreatefromjpeg($source);
+           elseif ($info['mime'] == 'image/gif') 
+               $image = imagecreatefromgif($source);
+           elseif ($info['mime'] == 'image/png') 
+               $image = imagecreatefrompng($source);
+           imagejpeg($image, $path, $quality);
+	}
+	public function findMdn($locationId, $mdnno, $records_per_page, $numer_of_records)
+    {	
+        $query = "DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT  SET @PageNumber=" . $records_per_page . " SET @RowsOfPage=" .$numer_of_records ." select distinct mdnno,invoiceno,wh,custid from ".$this->tbl_mdnData." where isnull(status,'')='' and wh='".$locationId."' and mdnno='".$mdnno."' group by mdnno,invoiceno,wh,custid ORDER BY mdnno OFFSET (@PageNumber-1) * @RowsOfPage ROWS  FETCH NEXT @RowsOfPage ROWS ONLY";
+        $params = array();
+        $options = array(
+            "Scrollable" => SQLSRV_CURSOR_KEYSET
+        );
+        $findMdnData = sqlsrv_query($this->myconn, $query, $params, $options);
+        if ($findMdnData === false){
+            die(print_r(sqlsrv_errors() , true));
+        }
+        else{
+            return $findMdnData;
+        }
+        return array();
+    }
+	public function findMdnListCount($locationId, $mdnno)
+    {
+        $query = "SELECT COUNT(DISTINCT mdnno) as total_rows FROM ".$this->tbl_mdnData. " where isnull(status,'')='' and wh='".$locationId."' and mdnno='".$mdnno."'";
+        $findMdndata = sqlsrv_query($this->myconn, $query);
+        $row = sqlsrv_fetch_array($findMdn, SQLSRV_FETCH_ASSOC);
+        return $row['total_rows'];
+    }
+	public function openMdn($locationId,$records_per_page, $numer_of_records)
+    {		
+        $query = "DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT  SET @PageNumber=" . $records_per_page . " SET @RowsOfPage=" .$numer_of_records ." select distinct mdnno,invoiceno,wh,custid from ".$this->tbl_mdnData." where isnull(status,'')='' and wh='".$locationId."' group by mdnno,invoiceno,wh,custid ORDER BY mdnno OFFSET (@PageNumber-1) * @RowsOfPage ROWS  FETCH NEXT @RowsOfPage ROWS ONLY";
+        $params = array();
+        $options = array(
+            "Scrollable" => SQLSRV_CURSOR_KEYSET
+        );
+        $openMdnData = sqlsrv_query($this->myconn, $query, $params, $options);
+        if ($openMdnData === false){
+            die(print_r(sqlsrv_errors() , true));
+        }
+        else{
+            return $openMdnData;
+        }
+        return array();
+    }
+	public function mdnListCount($locationId)
+    {
+        $query = "SELECT COUNT(DISTINCT asnno) as total_rows FROM ".$this->tbl_mdnData. " where isnull(status,'')='' and wh='".$locationId."'";
+        $openMdnata = sqlsrv_query($this->myconn, $query);
+        $row = sqlsrv_fetch_array($openMdnata, SQLSRV_FETCH_ASSOC);
+        return $row['total_rows'];
+    }
+	
+	public function findAsn($locationId, $asnno,$records_per_page, $numer_of_records)
+    {	
+        $query = "DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT  SET @PageNumber=" . $records_per_page . " SET @RowsOfPage=" .$numer_of_records ." select distinct asnno,invoiceno,wh,custid from ".$this->tbl_asnData." where isnull(status,'')='' and wh='".$locationId."' and asnno='".$asnno."' group by asnno,invoiceno,wh,custid ORDER BY asnno OFFSET (@PageNumber-1) * @RowsOfPage ROWS  FETCH NEXT @RowsOfPage ROWS ONLY";
+        $params = array();
+        $options = array(
+            "Scrollable" => SQLSRV_CURSOR_KEYSET
+        );
+        $findAsnData = sqlsrv_query($this->myconn, $query, $params, $options);
+        if ($findAsnData === false){
+            die(print_r(sqlsrv_errors() , true));
+        }
+        else{
+            return $findAsnData;
+        }
+        return array();
+    }
+	public function findAsnListCount($locationId, $asnno)
+    {
+        $query = "SELECT COUNT(DISTINCT asnno) as total_rows FROM ".$this->tbl_asnData. " where isnull(status,'')='' and wh='".$locationId."' and asnno='".$asnno."'";
+        $findAsndata = sqlsrv_query($this->myconn, $query);
+        $row = sqlsrv_fetch_array($findAsndata, SQLSRV_FETCH_ASSOC);
+        return $row['total_rows'];
+    }
+	public function openAsn($locationId,$records_per_page, $numer_of_records)
+    {		
+        $query = "DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT  SET @PageNumber=" . $records_per_page . " SET @RowsOfPage=" .$numer_of_records ." select distinct asnno,invoiceno,wh,custid from ".$this->tbl_asnData." where isnull(status,'')='' and wh='".$locationId."' group by asnno,invoiceno,wh,custid ORDER BY asnno OFFSET (@PageNumber-1) * @RowsOfPage ROWS  FETCH NEXT @RowsOfPage ROWS ONLY";
+        $params = array();
+        $options = array(
+            "Scrollable" => SQLSRV_CURSOR_KEYSET
+        );
+        $openAsnData = sqlsrv_query($this->myconn, $query, $params, $options);
+        if ($openAsnData === false){
+            die(print_r(sqlsrv_errors() , true));
+        }
+        else{
+            return $openAsnData;
+        }
+        return array();
+    }
+	public function asnListCount($locationId)
+    {
+        $query = "SELECT COUNT(DISTINCT asnno) as total_rows FROM ".$this->tbl_asnData. " where isnull(status,'')='' and wh='".$locationId."'";
+        $openAsnata = sqlsrv_query($this->myconn, $query);
+        $row = sqlsrv_fetch_array($openAsnata, SQLSRV_FETCH_ASSOC);
+        return $row['total_rows'];
+    }
+	public function uploadFileData($userId, $locationId, $asnno, $data)
+	{	
+		$responceArray = array();
+		foreach($data as $key=>$value)
+		{
+			$fileName = explode("/", $value->__zone_symbol__value);
+			$query = "Insert into " . $this->tbl_asnSub . "(ASNNO,IMURL,FILETYPE,FILENAME,FOLDERNAME)values('".$asnno."','".$value->__zone_symbol__value."','".$key."','".$fileName[4]."','ASN-".$asnno."')";
+			$saveUploadData = sqlsrv_query($this->myconn, $query);
+			$query = " UPDATE " . $this->tbl_asnData . " SET status='Y', DoneBy='".$userId."', DoneOn=GETDATE() WHERE ASNNO='".$asnno."' and isnull(Status, '')=''";
+			$sql = sqlsrv_query($this->myconn, $query);
+		}
+        if($sql === false)
+        {
+            die(print_r(sqlsrv_errors() , true));
+        }else{
+			return $responceArray = 'Data inserted successfully';
+		}
+	}
+    public function login_history($uid, $pass)
+    {
+		
+        $getuserData = sqlsrv_fetch_array(sqlsrv_query($this->myconn, "select * from " . $this->users_tbl . " where uID='" . $uid . "' and uPWD='" . $pass . "'") , SQLSRV_FETCH_ASSOC);
+        //return $getuserData;
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) //whether ip is from share internet
+        
+        {
+            $ip_address = $_SERVER['HTTP_CLIENT_IP'];
+            //whether ip is from proxy
+            
+        }
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+        {
+            $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        else
+        {
+            $ip_address = $_SERVER['REMOTE_ADDR'];
+        }
+		$pos1 = strpos($_SERVER['HTTP_USER_AGENT'], '(')+1;
+		$pos2 = strpos($_SERVER['HTTP_USER_AGENT'], ')')-$pos1;
+		$part = substr($_SERVER['HTTP_USER_AGENT'], $pos1, $pos2);
+		$parts = explode(" ", $part);
+		$deviceName = $parts[0].''.$parts[1].' '.$parts[2].' '.$parts[3].' '.$parts[4];
+        $query = "Insert into " . $this->tbl_login . "(user_id,user_name,location,comp_name,comp_ip,login_time,status)values('" . $uid . "','" . $getuserData['uNAME'] . "','" . $getuserData['WHID'] . "','" . $deviceName. "','" . $ip_address . "',GETDATE(), 'login')";
+        	
+		
+		
+		 $saveLogin = sqlsrv_query($this->myconn, $query);
+		
+		
+		
+        if ($saveLogin === false)
+        {
+            die(print_r(sqlsrv_errors() , true));
+        }
+		return;
+		
+    }
+    public function logOut($userId)
+    {
+        $query = " UPDATE " . $this->tbl_login . " SET status='logout', logout_time=GETDATE() WHERE USER_ID='" . $userId . "' and isnull(logout_time, '')=''";
+		
+		
+        $sql = sqlsrv_query($this->myconn, $query);
+        if ($sql === false)
+        {
+            die(print_r(sqlsrv_errors() , true));
+        }
+    }
+    public function check_login($uid, $pass)
+    {
+        $query = "select ID,UID,UPWD,uName,uDept,uWH,WHID,UACTIVE from " . $this->users_tbl . " WHERE uActive='1' AND uID='" . $uid . "' AND uPWD='" . $pass . "' order by id desc";
+        $usr_obj = sqlsrv_query($this->myconn, $query);
+        if ($usr_obj === false)
+        {
+            die(print_r(sqlsrv_errors() , true));
+        }
+        else
+        {
+            $data = sqlsrv_fetch_array($usr_obj, SQLSRV_FETCH_ASSOC);
+            return $data;
+        }
+        return array();
+    }
+    public function getWearHouse()
+    {
+        $query = "SELECT WHID,WHNAME FROM " . $this->tbl_whmaster . " WHERE WHACTIVE='1'";
+        $wearHouse = sqlsrv_query($this->myconn, $query);
+        if ($wearHouse === false)
+        {
+            die(print_r(sqlsrv_errors() , true));
+        }
+        else
+        {
+            return $wearHouse;
+        }
+        return array();
+    }
+    public function getPickListData($locationId, $records_per_page, $numer_of_records)
+    {
+        $query = "DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT  SET @PageNumber=" . $records_per_page . " SET @RowsOfPage=" . $numer_of_records . " select distinct wh,custid,dnno,custinvno,sum(qty) As InvQty,sum(pickqty) as PickQTy from " . $this->tbl_pickingdata . " where isnull(picklistno,'')='' AND wh='" . $locationId . "' group by wh,custid,dnno,custinvno ORDER BY DNNO OFFSET (@PageNumber-1) * @RowsOfPage ROWS  FETCH NEXT @RowsOfPage ROWS ONLY";
+        $params = array();
+        $options = array(
+            "Scrollable" => SQLSRV_CURSOR_KEYSET
+        );
+        $pickListData = sqlsrv_query($this->myconn, $query, $params, $options);
+        if ($pickListData === false)
+        {
+            die(print_r(sqlsrv_errors() , true));
+        }
+        else
+        {
+            return $pickListData;
+        }
+        return array();
+    }
+    public function pickListCount($locationId)
+    {
+        $query = "SELECT COUNT(DISTINCT DNNO) as total_rows FROM " . $this->tbl_pickingdata . " where isnull(picklistno,'')='' and wh='" . $locationId . "'";
+        $pickListData = sqlsrv_query($this->myconn, $query);
+        $row = sqlsrv_fetch_array($pickListData, SQLSRV_FETCH_ASSOC);
+        return $row['total_rows'];
+    }
+    public function getPickListDetailsData($wh, $dnno)
+    {
+        $query = "select distinct wh,custid,dnno,custinvno,sku,skudesc,batchno,whlocation,sum(qty) As InvQty,sum(pickqty) as PickQTy from " . $this->tbl_pickingdata . " where isnull(picklistno,'')='' and wh='" . $wh . "' and dnno='" . $dnno . "' group by wh,custid,dnno,custinvno,whlocation,sku,batchno,skudesc";
+        $pickListDetailsData = sqlsrv_query($this->myconn, $query);
+        if ($pickListDetailsData === false)
+        {
+            die(print_r(sqlsrv_errors() , true));
+        }else{
+            return $pickListDetailsData;
+        }
+        return array();
+    }
+    public function getrackLocationData($wh, $dnno, $whLocation, $records_per_page, $numer_of_records)
+    {
+        $query = "DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT  SET @PageNumber=" . $records_per_page . " SET @RowsOfPage=" . $numer_of_records . " select distinct sku,batchno,skudesc,whlocation,dnno,sum(qty) As InvQty,sum(pickqty) as PickQTy from " . $this->tbl_pickingdata . " where isnull(picklistno,'')='' and wh='" . $wh . "' and dnno='" . $dnno . "' and whlocation='" . $whLocation . "' group by sku,batchno,skudesc,whlocation,dnno ORDER BY DNNO OFFSET (@PageNumber-1) * @RowsOfPage ROWS  FETCH NEXT @RowsOfPage ROWS ONLY";
+        $rackLocationData = sqlsrv_query($this->myconn, $query);
+        if ($rackLocationData === false)
+        {
+            die(print_r(sqlsrv_errors() , true));
+        }
+        else
+        {
+            return $rackLocationData;
+        }
+        return array();
+    }
+    public function rackLocationCount($wh, $dnno, $whLocation)
+    {
+        $query = "SELECT COUNT(DISTINCT sku) as total_rows FROM " . $this->tbl_pickingdata . " where isnull(picklistno,'')='' and wh='" . $wh . "' and dnno='" . $dnno . "' and whlocation='" . $whLocation . "'";
+        $rackLocationData = sqlsrv_query($this->myconn, $query);
+        $row = sqlsrv_fetch_array($rackLocationData, SQLSRV_FETCH_ASSOC);
+        return $row['total_rows'];
+    }
+    public function skuData($skuCode, $wh, $dnno, $whLocation, $records_per_page, $numer_of_records)
+    {
+        $query = "DECLARE @PageNumber AS INT DECLARE @RowsOfPage AS INT  SET @PageNumber=" . $records_per_page . " SET @RowsOfPage=" . $numer_of_records . " select sku, batchno, skudesc, whlocation,dnno, sum(qty) As InvQty,sum(pickqty) as PickQTy from " . $this->tbl_pickingdata . "  where isnull(picklistno,'')='' and sku='" . $skuCode . "' and wh='" . $wh . "' and dnno='" . $dnno . "' and whlocation='" . $whLocation . "' group by sku,batchno,skudesc,whlocation, dnno ORDER BY DNNO OFFSET (@PageNumber-1) * @RowsOfPage ROWS  FETCH NEXT @RowsOfPage ROWS ONLY";
+        $skuData = sqlsrv_query($this->myconn, $query);
+        if ($skuData === false)
+        {
+            die(print_r(sqlsrv_errors() , true));
+        }
+        else
+        {
+            return $skuData;
+        }
+        return array();
+    }
+    public function skuCount($skuCode, $wh, $dnno, $whLocation)
+    {
+        $query = "SELECT COUNT(DISTINCT sku) as total_rows FROM " . $this->tbl_pickingdata . " where isnull(picklistno,'')='' and sku='" . $skuCode . "' and wh='" . $wh . "' and dnno='" . $dnno . "' and whlocation='" . $whLocation . "'";
+        $rackLocationData = sqlsrv_query($this->myconn, $query);
+        $row = sqlsrv_fetch_array($rackLocationData, SQLSRV_FETCH_ASSOC);
+        return $row['total_rows'];
+    }
+    public function getskuUpdateData($wh, $dnno, $sku, $batchno, $qty, $whLocation)
+    {
+        $responceArray = array();
+		$pickqty = sqlsrv_fetch_array(sqlsrv_query($this->myconn, "select pickqty, qty,sku,WHLOCATION from " . $this->tbl_pickingdata . "  where wh='" . $wh . "' and batchno='" . $batchno . "' and sku='" . $sku . "'and  DnNo='" . $dnno . "'  and  WHLOCATION='" . $whLocation . "'") , SQLSRV_FETCH_ASSOC);
+        $quantityToUpdate = $pickqty['pickqty'];
+		
+        if ($pickqty['sku'] == null)
+        {
+            return $responceArray = 'Sku could not found';
+        }
+       $quantityToUpdate = $pickqty['pickqty'] + $qty;
+        
+		if ($quantityToUpdate > $pickqty['qty'] || $quantityToUpdate < 0)
+        {
+            return $responceArray = 'Record could not be updated due to negative quantity Or quantity is greater';
+        }
+       
+     	
+        $params = array();
+        $options = array(
+            "Scrollable" => SQLSRV_CURSOR_KEYSET
+        );
+        $query = "Update " . $this->tbl_pickingdata . " set pickqty='" . $quantityToUpdate . "' where wh='" . $wh . "' and batchno='" . $batchno . "' and sku='" . $sku . "'and  DnNo='" . $dnno . "' and  whlocation='" . $whLocation . "'";
+        $skuUpdateData = sqlsrv_query($this->myconn, $query, $params, $options);
+        $rows = sqlsrv_num_rows($skuUpdateData);
+        if ($skuUpdateData === false)
+        {
+            return $responceArray = 'Record updation failed';
+        }
+        elseif ($rows == 0)
+        {
+            return $responceArray = 'Record could not found';
+        }
+        else
+        {
+            return $responceArray = 'Record updated successfully';
+        }
+        return array();
+    }
+
+    public function getPaging($page, $total_rows, $records_per_page, $page_url)
+    {
+        // paging array
+        $paging_arr = array();
+        // button for first page
+        $paging_arr["first"] = $page > 1 ? "{$page_url}page=1" : "";
+        // count all products in the database to calculate total pages
+        $total_pages = ceil($total_rows / $records_per_page);
+        // range of links to show
+        $range = 2;
+        // display links to 'range of pages' around 'current page'
+        $initial_num = $page - $range;
+        $condition_limit_num = ($page + $range) + 1;
+        $paging_arr['pages'] = array();
+        $page_count = 0;
+        for ($x = $initial_num;$x < $condition_limit_num;$x++)
+        {
+            // be sure '$x is greater than 0' AND 'less than or equal to the $total_pages'
+            if (($x > 0) && ($x <= $total_pages))
+            {
+                $paging_arr['pages'][$page_count]["page"] = $x;
+                $paging_arr['pages'][$page_count]["url"] = "{$page_url}page={$x}";
+                $paging_arr['pages'][$page_count]["current_page"] = $x == $page ? "yes" : "no";
+                $page_count++;
+            }
+        }
+        // button for last page
+        $paging_arr["last"] = $page < $total_pages ? "{$page_url}page={$total_pages}" : "";
+        // json format
+        return $paging_arr;
+    }
+}
+?>

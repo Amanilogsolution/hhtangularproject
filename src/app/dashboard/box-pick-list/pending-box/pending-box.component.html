@@ -1,0 +1,30 @@
+<div class="page-wrap">
+
+    <div class="heading">
+        <div>
+            <p>PENDING
+                PICKLIST</p>
+            <h1>{{location.WHNAME}} </h1>
+        </div>
+
+    </div>
+
+    <div *ngIf="error">{{errorMsg}}</div>
+
+    <div *ngIf="pendingPicklist.length && !error">
+        <a  (click)=goToItem(item)  *ngFor="let item of pendingPicklist">
+            <mat-card>
+                <p><span>Picklist: </span>{{item.dnno}}</p>
+                <p><span>Invoice: </span>{{item.custinvno}}</p>
+                <p><span>Customer:</span>{{item.custid}}</p>
+                <mat-divider></mat-divider>
+                <div class="item">
+                    <p><span>INV </span>{{item.InvQty||0}}</p>
+                    <p><span>PCK </span>{{item.PickQTy||0}}</p>
+                </div>
+            </mat-card>
+        </a>
+        <mat-paginator [length]='numberOfRecords' [pageSize]="3" (page)="onPaginateChange($event)">
+        </mat-paginator>
+    </div>
+</div>

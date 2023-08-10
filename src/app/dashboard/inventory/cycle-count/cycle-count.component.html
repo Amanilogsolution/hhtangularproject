@@ -1,0 +1,36 @@
+<div class="page-wrap">
+    <div class="heading result">
+      <div class="head">
+        <h1>CYCLE COUNT INVENTORY</h1>
+        
+      </div>
+    </div>
+
+    <div class="find-picklist">
+          <div class="radio">
+            <mat-form-field appearance="fill" style="width: 100%">
+              <mat-label>Select Client</mat-label>
+              <mat-select ngModel name="clientId" (valueChange)='getBatchId($event)'>
+                <mat-option>None</mat-option>
+                <mat-option
+                  *ngFor="let client of clientData"
+                  [value]="client.CLIENTID"
+                  >{{ client.CLIENT }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" style="width: 100%">
+              <mat-label>Select Batch Id</mat-label>
+              <mat-select ngModel name="batchId" (valueChange)='getAislesData($event)'  [disabled]="!batchRecords">
+                <mat-option>None</mat-option>
+                <mat-option
+                  *ngFor="let client of batchRecords"
+                  [value]="client.Batchid"
+                  >{{ client.Batchid }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+      </div>
+</div>

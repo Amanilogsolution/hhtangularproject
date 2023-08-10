@@ -1,0 +1,44 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.page-wrap{
+    min-height: calc(100vh - 130px);
+
+}
+.page-wrapper{
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+.mat-drawer-inner-container{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.mat-drawer-content{
+    background: #fff;
+}
+.heading{
+    display: grid;
+    grid-template-columns:auto;
+    padding: 10px;
+    background-color: #ece7e7;
+    margin:-20px -20px 0;
+    h1{
+        font-size: 16px;
+        margin: 0;
+    }
+    p{
+        margin: 0;
+        font-size: 14px;
+        color: #555;
+    }
+
+}
+.result{
+    h1{
+        color: maroon;
+    }
+}

@@ -1,0 +1,104 @@
+<div class="heading">
+    <div>
+        <p>Pick List</p>
+        <h1>{{pickList}} </h1>
+    </div>
+    <div [ngClass]="{'result': scanned}">
+        <p>Rack Location</p>
+        <h1>{{rackLocation}}</h1>
+    </div>
+    <div *ngIf="boxno">
+        <p>Box No.</p>
+        <h1>{{boxno}}</h1>
+    </div>
+</div>
+<mat-tab-group
+[(selectedIndex)]="selectedIndex" (selectedTabChange)="onTabChanged($event);">
+    <mat-tab label="Scan Box">
+        <app-scaner (newResult)="scanBox($event)"></app-scaner>
+        <form class="searchform" (ngSubmit)="searchBox(f)" #f="ngForm">
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Search Box</mat-label>
+                            <input matInput ngModel name="boxno" required />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f.valid">
+                            <mat-icon>search</mat-icon> Next
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </mat-tab>
+    <mat-tab label="Scan Location" [disabled]="!boxno">
+        <app-scaner (newResult)="scanLocation($event)"></app-scaner>
+        <form class="searchform" (ngSubmit)="searchLocation(f2)" #f2="ngForm">
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Search Rack Location</mat-label>
+                            <input matInput ngModel name="location" required />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f2.valid">
+                            <mat-icon>search</mat-icon> Next
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </mat-tab>
+    <mat-tab label="Scan SKU" [disabled]="!location">
+        <app-scaner (newResult)="scanSku($event)"></app-scaner>
+        <form class="searchform" (ngSubmit)="searchSku(f3)" #f3="ngForm">
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Search SKU</mat-label>
+                            <input matInput ngModel name="sku" required />
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f3.valid">
+                            <mat-icon>search</mat-icon> Show Results
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </mat-tab>
+</mat-tab-group>
+<div class="btn-group">
+
+ <button *ngIf="boxno" (click)="reset()" color="accent" mat-raised-button>Reset</button>
+ <div></div>
+    <ng-container *ngIf="location">
+        <button color="primary" (click)="manualUpdate()" mat-raised-button>Bulk Update</button>
+    </ng-container>
+</div>
+
+
+
+<mat-card *ngFor="let item of rackData">
+    <p><span>SKU: </span>{{item.skuCode}}</p>
+    <p><span>Description: </span>{{item.skudesc}}</p>
+    <p><span>Batch: </span>{{item.batchno}}</p>
+    <mat-divider></mat-divider>
+    <div class="item">
+        <p><span>INV </span>{{item.inv||0}}</p>
+        <p><span>PCK </span>{{item.pck||0}}</p>
+    </div>
+</mat-card>
+
+<mat-paginator [length]='numberOfRecords' [pageSize]="10" (page)="onPaginateChange($event)">
+</mat-paginator>

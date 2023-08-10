@@ -1,0 +1,21 @@
+.heading{
+    margin-bottom: 30px;
+}
+.head{
+    display: flex;
+    justify-content: space-between;
+}
+.info{
+    display: grid;
+    grid-template-columns: 50% 50% ;
+    grid-column-gap: 10px;
+    grid-row-gap: 5px;
+    border-top:1px solid #aca9a9;
+    padding:10px 0;
+    p{
+        color: #333;
+        span{
+            color: #000;
+        }
+    }
+}

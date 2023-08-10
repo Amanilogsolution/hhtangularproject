@@ -1,0 +1,106 @@
+<div class="page-wrap">
+    
+    <div class="heading result">
+        <div class="head">
+            <h1>CYCLE COUNT INVENTORY</h1>
+            <mat-slide-toggle
+            color="primary"
+            [(ngModel)]="hhtScanEnabled"
+            (change)="hhtScanToggle($event)"
+            >USE HHT Device</mat-slide-toggle
+          >
+          </div>
+        <div>
+            <div class="item">
+                <p> Cycle Count Id: <span>{{batchId}} </span></p>
+                <p>TotalAllotBIN: <span>{{data?.TotalAllotBIN }} </span></p>
+                <p>Aisles: <span>{{aisles }} </span></p>
+                <p>OpenForCount: <span>{{data?.OpenForCount }} </span></p>
+                <p *ngIf="rackLocation.length">Rack Location: <span>{{rackLocation}} </span></p>
+                <button mat-raised-button color="primary" (click)="backToAisles()">Back To Aisles</button>
+                <button *ngIf="rackLocation.length" mat-raised-button color="primary" (click)="resetAll()">Back To Rack Location</button>
+            </div>
+           
+        </div>
+       
+    </div>
+    
+
+    <div class="find-picklist">
+        <form class="example-form" (ngSubmit)="search(f)" #f="ngForm" *ngIf="!scanBinData?.length">
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Scan Bin</mat-label>
+                            <input matInput ngModel  name="scanBin" required (keyup)="changeLPN($event)"
+                            autocomplete="off" #scanBinInput autofocus/>
+                        </mat-form-field>
+                    </td>
+                    <td width="113">
+                        <button mat-flat-button color="accent" [disabled]="!f.valid || hhtScanEnabled">
+                            <mat-icon>search</mat-icon> SEARCH
+                        </button>
+                        <button *ngIf="saveBtn == 1" type="button" mat-flat-button color="primary" (click)="save()">
+                            Save
+                       </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form class="example-form" (ngSubmit)="skuScan(f1)" #f1="ngForm" *ngIf="scanBinData?.length > 0">
+            <table style="width: 100%;">
+                <tr>
+                    <td width="60%">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Scan Sku</mat-label>
+                            <input matInput  ngModel name="sku" required (keyup)="changeSku($event)"
+                            autocomplete="off" width="90%" autofocus />
+                        </mat-form-field>
+                    </td>
+                    <td width="40%">
+                        <button style="margin: 5px;" mat-flat-button color="accent" [disabled]="!f1.valid || hhtScanEnabled">
+                            <mat-icon>search</mat-icon> Scan
+                        </button>
+                        <button type="button" mat-flat-button color="primary" (click)="save()">
+                             Save
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="find-picklist" *ngIf="scanBinData?.length > 0">
+        <table class="tbl-class">
+            <tr>
+               <th>SKU</th>
+               <th>Aval</th>
+               <th>Block</th>
+               <th>Total</th>
+               <th>SLOC</th>
+               <th>Scan</th>
+            </tr>
+            <tr *ngFor="let items of scanBinData; let i = index" [attr.data-index]="i">
+                <td>{{ items.SKU }}</td>
+                <td>{{ items.AvailForAllocation }}</td>
+                <td>{{ items.PendingForPick }}</td>
+                <td>{{ items.Total }}</td>
+                <td>{{ items.SLOC }}</td>
+                <td>{{ items.totalScan}}</td>
+            </tr> 
+        </table>
+    </div>
+
+    <div *ngIf="scanBinData; else scan;"></div>
+    <ng-template #scan>
+        <a *ngFor="let items of scanAislesData; let i = index">
+            <mat-card>
+                <p><span>BIN: </span>{{ items.RackLocation }}</p>
+            </mat-card>
+        </a>
+    </ng-template>
+    <div *ngIf="!scanBinData">
+    <mat-paginator *ngIf="numberOfRecords" [length]='numberOfRecords' [pageSize]="10" (page)="onPaginateChange($event)">
+    </mat-paginator>
+</div>
+</div>

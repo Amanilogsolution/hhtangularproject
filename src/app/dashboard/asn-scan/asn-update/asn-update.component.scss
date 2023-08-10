@@ -1,0 +1,32 @@
+.heading .item{
+    display: grid;
+    grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+    width: 100%;
+    text-decoration: none;
+    margin-bottom: 15px;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    padding-top: 10px;
+    span{
+        color: #000;
+    }
+}
+.form-inline{
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 10px;
+    >div{
+        padding: 10px;
+        border: 1px solid #eee;
+    }
+
+}
+.up-btn{
+    float: right;
+    margin-bottom: 40px;
+}
+.htt-opt{
+    clear: both;
+    text-align: center;
+}

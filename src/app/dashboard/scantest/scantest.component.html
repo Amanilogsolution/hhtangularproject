@@ -1,0 +1,4 @@
+<app-scaner (newResult)="newResult($event)"></app-scaner>
+<div *ngFor="let result of results" class="result" [ngClass]="{'error':result.result}">
+  {{result.result}}
+</div>

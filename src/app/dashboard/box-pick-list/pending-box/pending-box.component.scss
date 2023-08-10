@@ -1,0 +1,30 @@
+.mat-card{
+    margin: 10px auto;
+}
+a{text-decoration: none;}
+.item {
+    display: grid;
+    grid-template-columns: calc(50% - 10px) calc(50% - 10px);
+    width: 100%;
+    text-decoration: none;
+    margin-bottom: 20px;
+    grid-gap: 20px;
+    padding-top: 10px;
+
+
+}
+p {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    span{
+        color: #3f51b5;
+    }
+}
+.list{
+    padding: 0;
+    border: 0;
+    display: block;
+    width: 100%;
+    background: transparent;
+}

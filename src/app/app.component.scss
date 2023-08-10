@@ -1,0 +1,15 @@
+.spinner{
+    position: fixed;
+
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+.spinner-wrap{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #fff, $alpha: 0.7);
+    z-index: 1111;
+    top:0
+}
